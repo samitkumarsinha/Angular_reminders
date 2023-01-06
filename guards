@@ -1,0 +1,28 @@
+component
+ canExit(): boolean{
+    if(confirm('Wish to leave?')){
+      return true;
+    }else{
+      return false;
+    }
+  }
+  -----------
+  deactivate guard
+ return component.canExit();
+ -------------
+ route
+   {path:'update', component: ContactComponent, canDeactivate : [ExitGuard] }
+--------------------------------------------------------------------------------------
+activate guard
+ this.ds.token.subscribe((item: string) =>{
+      if(item === ''){
+        alert('please sign in')
+        this.isLogged = false;
+      }else
+        this.isLogged = true;
+    })
+    return this.isLogged;
+---------------
+route
+  {path:'posts', component: AboutComponent, canActivate: [AuthGuard]},
+---------------------------------------------------------------------------------------
