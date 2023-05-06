@@ -1,0 +1,67 @@
+app routing module
+const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+  {
+    path: 'site', component: MainComponent,
+    children: [
+      {path: 'home', component: HomeComponent},
+      { path: 'about', component: AboutComponent },
+      { path: 'contact', component: ContactComponent },
+    ],
+  },
+  -------------------------
+  main comp
+<app-header></app-header>
+<router-outlet></router-outlet>
+ ---------------------------
+ login
+ export class LoginComponent {
+  loginform!: FormGroup;
+  constructor(private fb: FormBuilder, private ds: DataService, private router: Router){
+    this.loginform = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    })
+  }
+  login(){
+    let data = this.loginform.value;
+    this.ds.login(data).subscribe(data => {
+      if(data.token) {
+        window.localStorage.setItem('token', data.token);
+        this.router.navigate(['/site/home'])
+      }
+    })
+  }
+}
+---------------------------------------------------
+header
+<mat-toolbar color="primary">
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="example-icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>dialpad</mat-icon>
+      <span>Redial</span>
+    </button>
+    <button mat-menu-item disabled>
+      <mat-icon>voicemail</mat-icon>
+      <span>Check voice mail</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>notifications_off</mat-icon>
+      <span>Disable alerts</span>
+    </button>
+  </mat-menu>
+    <div class="spacer"></div>
+    <a mat-button routerLink="/site/home">Home</a>
+    <a mat-button routerLink="/site/about">About</a>
+    <a mat-button routerLink="/site/contact">Contact</a>
+
+</mat-toolbar>
+--------------------------------------------------
+app component
+<router-outlet></router-outlet>
+---------------------------------------------------
+
+  
